@@ -1,0 +1,9 @@
+API_ID = ''
+APP_SECRET = ''
+CONSUMER_KEY = ''
+CONSUMER_SECRET = ''
+TOKEN = ''
+TOKEN_SECRET = ''
+CITY = 'San Antonio'
+CATEGORIES = 'Restaurants'
+RECURSE_CATEGORIES = False

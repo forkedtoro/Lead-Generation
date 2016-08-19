@@ -5,9 +5,10 @@ import os
 from yelp.client import Client
 from yelp.oauth1_authenticator import Oauth1Authenticator
 from yelp.errors import InvalidParameter
-all_categories = {
-    'restaurants': 0
-}
+
+all_categories = {}
+for category in settings.CATEGORIES:
+    all_categories[category] = 0
 
 def get_category(mcategory):
     auth = Oauth1Authenticator(
@@ -27,7 +28,7 @@ def get_category(mcategory):
         }
         try:
             response = None
-            response = client.search('San Antonio', **params)
+            response = client.search(settings.CITY, **params)
         except InvalidParameter:
             all_categories[mcategory] = -1
             break
@@ -37,10 +38,11 @@ def get_category(mcategory):
                 categories = [category.name for category in business.categories]
             except TypeError:
                 continue
-            for category in categories:
-                if category.lower().replace(" ","") not in all_categories:
-                    all_categories[category.lower().replace(" ","")] = 0
-            with open('businessdata.csv', 'a') as outfile:
+            if settings.RECURSE_CATEGORIES:
+                for category in categories:
+                    if category.lower().replace(" ","") not in all_categories:
+                        all_categories[category.lower().replace(" ","")] = 0
+            with open('output/businessdata.csv', 'a') as outfile:
                 try:
                     outfile.write(
                         '"{0}"|"{1}"|"{2}"|"{3}"|"{4}"|"{5}"|"{6}"|"{7}"|"{8}"|"{9}"\n'.format(
@@ -69,10 +71,10 @@ while not done:
         if all_categories[category] == 0:
             get_category(category)
             break
+    print category
     done = True
-    print all_categories
     for category in all_categories:
         if all_categories[category] == 0:
             done = False
 
-os.system('sort businessdata.csv | uniq > businessdata_uniq.csv')
+os.system('sort output/businessdata.csv | uniq > output/businessdata_uniq.csv')
