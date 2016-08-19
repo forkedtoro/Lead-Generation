@@ -5,5 +5,5 @@ CONSUMER_SECRET = ''
 TOKEN = ''
 TOKEN_SECRET = ''
 CITY = 'San Antonio'
-CATEGORIES = 'Restaurants'
+CATEGORIES = ['restaurants',]
 RECURSE_CATEGORIES = False
