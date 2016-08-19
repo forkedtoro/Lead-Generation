@@ -35,7 +35,7 @@ def get_category(mcategory):
         print '{} {} {}'.format(params, len(response.businesses), response.total)
         for business in response.businesses:
             try:
-                categories = [category.name for category in business.categories]
+                categories = [category.alias for category in business.categories]
             except TypeError:
                 continue
             if settings.RECURSE_CATEGORIES:
